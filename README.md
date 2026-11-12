@@ -8,9 +8,8 @@ Laboratorio 5 (SQL 2/2) del curso **ICN-292 Sistemas de Información para la Ges
 
 ## Descripción
 
-Construcción de la base `andesbike` de *Andes Bike*, una cadena de tiendas de bicicletas, en MySQL con carga oficial de datos y diez consultas de gestión sobre tiendas, vendedores y ventas. La base incluye las tablas `tiendas`, `vendedores`, `bicicletas` y `ventas`, con claves primarias, claves foráneas, `AUTO_INCREMENT`, `ENUM`, `DATE`, `DECIMAL(10,2)` y restricciones `CHECK`.
+Construcción de la base `andesbike` de *Andes Bike*, una cadena de tiendas de bicicletas, en MySQL con carga oficial de datos y diez consultas de gestión sobre tiendas, vendedores y ventas. 
 
-Las consultas se centran en lo que falta o se compara consigo mismo: `LEFT JOIN`, anti-join (`IS NULL`), autojoin, JOIN encadenado, `GROUP BY` con `HAVING` y subconsultas escalares.
 
 ## Archivos
 
