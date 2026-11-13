@@ -1,0 +1,346 @@
+\documentclass[11pt,letterpaper]{article}
+
+%%% LANGUAGE: Spanish
+\usepackage[spanish,english]{babel}
+\addto\shorthandsspanish{\spanishdeactivate{~<>}}
+
+%%% ENCODING
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{textcomp}
+
+\usepackage{graphicx}
+\usepackage{epstopdf}
+\usepackage{epsfig}
+
+%%
+%%%%GENERAL INFROMATION%%%%
+%%
+
+\newcommand{\theCampus}{Campus Vitacura}
+\newcommand{\theAssignment}{SIG}
+\newcommand{\therevision}{DV}
+
+%%% PACKAGES
+\usepackage{booktabs} 	% for much better looking tables
+\usepackage{array} 		% for better arrays (eg matrices) in maths
+\usepackage{paralist} 	% very flexible & customizable lists (eg. enumerate/itemize, etc.)
+\usepackage{verbatim} 	% adds environment for commenting out blocks of text & for better verbatim
+\usepackage{subfigure} % make it possible to include more than one captioned figure/table in a single float
+\usepackage{xcolor}
+\usepackage{listings}  % bloques de código SQL
+
+% FECHA
+\usepackage{datetime}
+\newdateformat{monthyeardate}{%
+  \monthname[\THEMONTH], \THEYEAR}
+
+%%% PAGE DIMENSIONS
+\usepackage[margin=25mm,inner=30mm]{geometry} % to change the page dimensions
+
+
+%%% HEADERS & FOOTERS   %%%
+\usepackage{fancyhdr} 	% This should be set AFTER setting up the page geometry
+\pagestyle{fancy} 			% options: empty , plain , fancy
+\renewcommand{\headrulewidth}{0.5pt} % customise the layout...
+
+\renewcommand{\footrulewidth}{0.5pt} % customise the layout...
+\lhead{\includegraphics[scale=.15]{Logos/header_utfsm.png}}\cfoot{}
+\cfoot{\textbf{\thepage}}
+\rfoot{\therevision}
+\lfoot{\theAssignment}\chead{}
+\rhead{}
+
+
+\usepackage[colorlinks=true,linkcolor=blue,urlcolor=blue]{hyperref}
+
+%%% SECTION TITLE APPEARANCE
+\usepackage{sectsty}
+%\allsectionsfont{\sffamily\mdseries\upshape} % (See the fntguide.pdf for font help)
+\usepackage{float}
+\usepackage{titlesec}
+\titlelabel{\thetitle.\quad}
+
+\usepackage[numbers]{natbib}
+
+\usepackage{lipsum}
+\usepackage[section]{placeins}
+
+%%% ESTILO DE CÓDIGO SQL
+\lstdefinestyle{sqlstyle}{
+  language=SQL,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\bfseries\color{blue!60!black},
+  stringstyle=\color{orange!70!black},
+  commentstyle=\color{gray},
+  numbers=none,
+  columns=flexible,
+  keepspaces=true,
+  upquote=true,
+  showstringspaces=false,
+  breaklines=true,
+  frame=single,
+  rulecolor=\color{gray!60},
+  backgroundcolor=\color{gray!8},
+  framesep=4pt,
+  xleftmargin=2pt,
+  xrightmargin=2pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+  % tildes y ñ dentro del código (p. ej. 'Montaña'): listings no lee UTF-8 por sí solo
+  literate={á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+           {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+           {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1
+}
+\lstset{style=sqlstyle}
+
+% Figura de captura de MySQL Workbench (ancho común para todas)
+\newcommand{\captura}[3]{%
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.88\linewidth]{Lab5/Figuras/#1}
+    \caption{#2}
+    \label{#3}
+  \end{figure}
+}
+
+
+%------------------------------------------------------------------------------
+%%%% TITLE PAGE
+%------------------------------------------------------------------------------
+\begin{document}
+\selectlanguage{spanish}
+
+\begin{titlepage}
+\begin{figure}[H]
+\includegraphics[width = 0.4\linewidth]{Logos/logo_di.png}
+\hspace{144pt}
+\vspace{-70pt}
+\end{figure}
+\vspace{60mm}
+\begin{center}
+\hrule
+\vspace{2mm}
+{\Huge \textbf{\sc Informe de Laboratorio 5:}} \\
+\vspace{2mm}
+{\Large \sc{\textit{Entregable SQL (2/2): base de datos de Andes Bike}}}
+\vspace{2mm}
+\hrule
+\vspace{1cm}
+
+
+%%%%AUTHORS%%%%
+\centering
+    {\textbf{Diego Victoriano Rodríguez} \\
+    {\small Ingeniería Civil Industrial, 21.540.820-5, \emph{diego.victoriano@usm.cl}}\\
+    }
+
+    \vspace{0.5cm}
+    {ICN292 - Sistemas de Información para la Gestión.} \\
+    {\textbf{Paralelo:} 101}
+
+    \vspace{0.5cm}
+    \textbf{Profesores:} José Miguel González P. \textbar\ José Luis Sáez T. \textbar\ Patricio Cifuentes\\[0.3cm]
+    \textbf{Ayudantes:} Valeria Bobadilla \textbar  Catalina Bodaleo \textbar\ Luis Contreras \textbar  Benjamín Jara
+
+    \vspace{0.8cm}
+    \textbf{Repositorio GitHub:}\\[0.1cm]
+    {\small \url{https://github.com/diegovictorianor/ICN292-Lab5-Victoriano-Diego}}
+
+    \vfill
+    \textsc{\monthyeardate\today}\\[0.5cm]
+    \textsc{\theCampus}
+\end{center}
+
+
+\clearpage
+
+\parindent=0mm
+
+
+\end{titlepage}
+
+%--------------------------------------------------
+%%% CONSULTAS %%%%
+%--------------------------------------------------
+%%% Consulta 1
+\section*{Consulta 1: vendedores con su cantidad de ventas}
+
+\begin{lstlisting}
+SELECT v.nombre,
+       COUNT(ve.id_venta) AS cantidad_ventas
+FROM vendedores v
+LEFT JOIN ventas ve ON v.id_vendedor = ve.id_vendedor
+GROUP BY v.id_vendedor, v.nombre
+ORDER BY cantidad_ventas DESC, v.nombre;
+\end{lstlisting}
+
+\captura{consulta_1.png}{Resultado de la consulta 1 en MySQL Workbench.}{fig:c1}
+
+\clearpage
+%%% Consulta 2
+\section*{Consulta 2: ventas y unidades vendidas por tienda}
+ 
+\begin{lstlisting}
+SELECT t.nombre,
+       COUNT(ve.id_venta)             AS total_ventas,
+       IFNULL(SUM(ve.unidades), 0)    AS total_unidades
+FROM tiendas t
+LEFT JOIN vendedores v  ON t.id_tienda   = v.id_tienda
+LEFT JOIN ventas     ve ON v.id_vendedor = ve.id_vendedor
+GROUP BY t.id_tienda, t.nombre
+ORDER BY total_unidades DESC, t.nombre;
+\end{lstlisting}
+ 
+\captura{consulta_2.png}{Resultado de la consulta 2 en MySQL Workbench.}{fig:c2}
+
+\clearpage
+%%% Consulta 3
+\section*{Consulta 3: tiendas sin ningún vendedor asignado}
+
+\begin{lstlisting}
+SELECT t.nombre, t.comuna
+FROM tiendas t
+LEFT JOIN vendedores v ON t.id_tienda = v.id_tienda
+WHERE v.id_vendedor IS NULL;
+\end{lstlisting}
+
+\captura{consulta_3.png}{Resultado de la consulta 3 en MySQL Workbench.}{fig:c3}
+
+\clearpage
+%%% Consulta 4
+\section*{Consulta 4: modelos sin ventas en junio de 2025}
+
+\begin{lstlisting}
+SELECT b.modelo, b.categoria
+FROM bicicletas b
+LEFT JOIN ventas ve ON b.id_bicicleta = ve.id_bicicleta
+                   AND ve.fecha >= '2025-06-01'
+                   AND ve.fecha <  '2025-07-01'
+WHERE ve.id_venta IS NULL
+ORDER BY b.modelo;
+\end{lstlisting}
+
+La condición del mes viene en el \texttt{ON} del \texttt{LEFT JOIN}. Si la hubiera puesto en el \texttt{WHERE}, ese filtro descartaría las filas sin pareja (con \texttt{fecha} NULL) y la consulta devolvería cero filas.
+
+\captura{consulta_4.png}{Resultado de la consulta 4 en MySQL Workbench.}{fig:c4}
+
+\clearpage
+%%% Consulta 5
+\section*{Consulta 5: vendedores sin ventas y su tienda}
+
+\begin{lstlisting}
+SELECT v.nombre AS vendedor,
+       t.nombre AS tienda
+FROM vendedores v
+LEFT JOIN tiendas t  ON v.id_tienda   = t.id_tienda
+LEFT JOIN ventas  ve ON v.id_vendedor = ve.id_vendedor
+WHERE ve.id_venta IS NULL
+ORDER BY v.nombre;
+\end{lstlisting}
+
+\captura{consulta_5.png}{Resultado de la consulta 5 en MySQL Workbench.}{fig:c5}
+
+\clearpage
+%%% Consulta 6
+\section*{Consulta 6: pares de vendedores de la misma tienda}
+
+\begin{lstlisting}
+SELECT v1.nombre        AS vendedor_1,
+       v1.fecha_ingreso AS ingreso_1,
+       v2.nombre        AS vendedor_2,
+       v2.fecha_ingreso AS ingreso_2,
+       t.nombre         AS tienda
+FROM vendedores v1
+JOIN vendedores v2 ON v1.id_tienda = v2.id_tienda
+                  AND (v1.fecha_ingreso < v2.fecha_ingreso
+                       OR (v1.fecha_ingreso = v2.fecha_ingreso
+                           AND v1.id_vendedor < v2.id_vendedor))
+JOIN tiendas t ON v1.id_tienda = t.id_tienda
+ORDER BY t.nombre, v1.fecha_ingreso, v2.fecha_ingreso;
+\end{lstlisting}
+
+\captura{consulta_6.png}{Resultado de la consulta 6 en MySQL Workbench.}{fig:c6}
+
+\clearpage
+%%% Consulta 7
+\section*{Consulta 7: monto vendido en Montaña y Ruta por tienda}
+
+\begin{lstlisting}
+SELECT t.nombre,
+       SUM(ve.unidades * b.precio) AS monto_total
+FROM tiendas t
+JOIN vendedores v  ON t.id_tienda    = v.id_tienda
+JOIN ventas     ve ON v.id_vendedor  = ve.id_vendedor
+JOIN bicicletas b  ON ve.id_bicicleta = b.id_bicicleta
+WHERE b.categoria IN ('Montaña', 'Ruta')
+GROUP BY t.id_tienda, t.nombre
+HAVING SUM(ve.unidades * b.precio) > 2000000
+ORDER BY monto_total DESC;
+\end{lstlisting}
+
+\captura{consulta_7.png}{Resultado de la consulta 7 en MySQL Workbench.}{fig:c7}
+
+\clearpage
+%%% Consulta 8
+\section*{Consulta 8: bicicletas sobre el precio promedio del catálogo}
+
+\begin{lstlisting}
+SELECT modelo, precio
+FROM bicicletas
+WHERE precio > (SELECT AVG(precio) FROM bicicletas)
+ORDER BY precio DESC;
+\end{lstlisting}
+
+El promedio del catálogo es \$657.490 (verificado en la Figura~\ref{fig:c8b}). en esta consulta se obtuvo mediante la subconsulta \lstinline|SELECT AVG(precio) FROM bicicletas|, que promedia el precio de los 8 modelos de la tabla \texttt{bicicletas}.
+
+\captura{consulta_8.png}{Resultado de la consulta 8 en MySQL Workbench.}{fig:c8}
+
+\clearpage
+\subsection*{Verificación del promedio del catálogo}
+
+\begin{lstlisting}
+SELECT AVG(precio) AS promedio_catalogo
+FROM bicicletas;
+\end{lstlisting}
+
+\captura{verificacion_promedio.png}{Verificación del promedio del catálogo en MySQL Workbench.}{fig:c8b}
+
+\clearpage
+%%% Consulta 9
+\section*{Consulta 9: vendedores sobre el promedio de unidades de la cadena}
+
+\begin{lstlisting}
+SELECT v.nombre,
+       AVG(ve.unidades) AS promedio_unidades
+FROM vendedores v
+JOIN ventas ve ON v.id_vendedor = ve.id_vendedor
+GROUP BY v.id_vendedor, v.nombre
+HAVING AVG(ve.unidades) > (SELECT AVG(unidades) FROM ventas)
+ORDER BY promedio_unidades DESC, v.nombre;
+\end{lstlisting}
+
+\captura{consulta_9.png}{Resultado de la consulta 9 en MySQL Workbench.}{fig:c9}
+
+\clearpage
+%%% Consulta 10
+\section*{Consulta 10: monto total vendido por vendedor}
+
+\begin{lstlisting}
+SELECT v.nombre,
+       SUM(ve.unidades * b.precio) AS monto_total
+FROM vendedores v
+LEFT JOIN ventas     ve ON v.id_vendedor    = ve.id_vendedor
+LEFT JOIN bicicletas b  ON ve.id_bicicleta  = b.id_bicicleta
+GROUP BY v.id_vendedor, v.nombre
+ORDER BY monto_total DESC, v.nombre;
+\end{lstlisting}
+
+Fernanda Lillo y Rubén Castro muestran NULL y no cero porque, al no tener ventas, el \texttt{LEFT JOIN} les deja \texttt{unidades} y \texttt{precio} en NULL, y \texttt{SUM} de puros NULL devuelve NULL. Para que mostraran cero habría que envolver la suma en \mbox{\lstinline|IFNULL(SUM(ve.unidades * b.precio), 0)|}.
+
+\captura{consulta_10.png}{Resultado de la consulta 10 en MySQL Workbench.}{fig:c10}
+
+\end{document}
